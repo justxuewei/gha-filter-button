@@ -92,7 +92,7 @@ function loopWithDelay() {
     if (stateElem) {
         var title = stateElem.getAttribute('title');
         if (title !== 'Status: Open' && title !== 'Status: Draft') {
-            console.log('GitHub Actions Filter Button: Exit due to the status of PR is not "open".');
+            console.log('GitHub Actions Filter Button: Exit as the status of PR is neither "open" nor "draft".');
             return;
         }
     } else {
