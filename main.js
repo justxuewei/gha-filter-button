@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         GitHub Actions Filter Button
 // @namespace    http://www.nxw.name
-// @version      2024-02-18
-// @description  Filter GitHub Actions which are not passed but required
+// @version      1.0.0
+// @description  Filter Kata Containers passed or non-required checks.
 // @author       Xuewei Niu
 // @match        https://github.com/kata-containers/kata-containers/pull/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
@@ -51,7 +51,7 @@ function insertFilter() {
  
     var filterButton = document.createElement('button');
     filterButton.type = 'button';
-    filterButton.textContent = 'Filter Not Passed and Required Checks';
+    filterButton.textContent = 'Filter Passed or Non-required Checks';
     filterButton.addEventListener('click', filterButtonOnClick);
  
     hideAllChecks.parentNode.insertBefore(filterButton, filterButton.nextSibling);
