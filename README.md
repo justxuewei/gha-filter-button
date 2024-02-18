@@ -1,6 +1,6 @@
-# GitHub Filter Button for Kata Containers
+# GitHub Actions Filter Button for Kata Containers
 
-> Please refresh the page mannually if the button doesn't show up sometimes as there are some conflicts on the page of GitHub's pull request with TamperMonkey.
+> Please refresh the page manually if the button doesn't show up sometimes as there are some conflicts on the page of GitHub's pull request with TamperMonkey.
 
 A script to filter checks that is passed in the page of pull request. This can significantly reduce the time it takes to find a failed check. The effect is as follows.
 
