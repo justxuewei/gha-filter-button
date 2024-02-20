@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         GitHub Actions Filter Button
 // @namespace    http://www.nxw.name
-// @version      1.0.3
+// @version      1.0.4
 // @description  Filter Kata Containers passed or non-required checks.
 // @author       Xuewei Niu
-// @match        *://github.com/kata-containers/kata-containers/*
+// @match        *://github.com/kata-containers/kata-containers*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
 // @grant        none
 // @license      Apache-2.0
