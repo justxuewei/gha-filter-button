@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Actions Filter Button
 // @namespace    http://www.nxw.name
-// @version      1.0.5
+// @version      1.0.6
 // @description  Filter Kata Containers passed or non-required checks.
 // @author       Xuewei Niu
 // @match        *://github.com/kata-containers/kata-containers*
@@ -82,7 +82,7 @@ function insertHiddenCheckCssStyle() {
 }
 
 function updateFilterButton(href) {
-    const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+$/;
+    const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+(#pullrequestreview-\d+)?$/;
     if (regex.test(href)) {
         console.log('show filter button', href);
         filterButton.classList.remove('hidden-check');
