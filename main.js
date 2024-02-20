@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         GitHub Actions Filter Button
 // @namespace    http://www.nxw.name
-// @version      1.0.2
+// @version      1.0.3
 // @description  Filter Kata Containers passed or non-required checks.
 // @author       Xuewei Niu
-// @match        https://github.com/kata-containers/kata-containers/pull/*
+// @match        *://github.com/kata-containers/kata-containers/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=github.com
 // @grant        none
 // @license      Apache-2.0
@@ -13,6 +13,7 @@
 // ==/UserScript==
 
 var hidden = false;
+var filterButton;
 
 function onFilterButtonClicked() {
     var checks = document.querySelectorAll('div.merge-status-list.hide-closed-list.js-updatable-content-preserve-scroll-position > div');
@@ -56,10 +57,11 @@ function insertFilterButton() {
     var body = document.querySelector('body');
     var bodyFirstChild = document.querySelector('body div:nth-child(1)');
 
-    var filterButton = document.createElement('button');
+    filterButton = document.createElement('button');
     filterButton.type = 'button';
     filterButton.textContent = 'Filter Checks';
     filterButton.classList.add('gha-filter-button');
+    filterButton.classList.add('hidden-check');
     filterButton.addEventListener('click', onFilterButtonClicked);
 
     body.insertBefore(filterButton, bodyFirstChild);
@@ -73,9 +75,40 @@ function insertHiddenCheckCssStyle() {
     document.head.appendChild(styleElement);
 }
 
+function updateFilterButton(href) {
+    const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+$/;
+    if (regex.test(href)) {
+        console.log('show filter button', href);
+        filterButton.classList.remove('hidden-check');
+    } else {
+        console.log('hide filter button', href);
+        filterButton.classList.add('hidden-check');
+    }
+}
+
+function listenUrlChanged() {
+    var _wr = function (type) {
+        var orig = history[type];
+        return function () {
+            var rv = orig.apply(this, arguments);
+            var e = new Event(type);
+            e.arguments = arguments;
+            window.dispatchEvent(e);
+            return rv;
+        };
+    };
+    history.pushState = _wr('pushState');
+    window.addEventListener('pushState', function (e) {
+        console.debug('Url changed', window.location.href);
+        updateFilterButton(window.location.href);
+    });
+}
+
 (function() {
     'use strict';
 
     insertHiddenCheckCssStyle();
     insertFilterButton();
+    updateFilterButton(window.location.href);
+    listenUrlChanged();
 })();
