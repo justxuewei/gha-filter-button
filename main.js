@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Actions Filter Button
 // @namespace    http://www.nxw.name
-// @version      1.0.4
+// @version      1.0.5
 // @description  Filter Kata Containers passed or non-required checks.
 // @author       Xuewei Niu
 // @match        *://github.com/kata-containers/kata-containers*
@@ -12,7 +12,7 @@
 // @updateURL https://update.greasyfork.org/scripts/486753/GitHub%20Actions%20Filter%20Button.meta.js
 // ==/UserScript==
 
-var hidden = false;
+var filteredItems = -1;
 var filterButton;
 
 function onFilterButtonClicked() {
@@ -22,7 +22,12 @@ function onFilterButtonClicked() {
         return;
     }
 
-    hidden = !hidden;
+    var hidden = filteredItems < 0;
+    if (hidden) {
+        filteredItems = 0;
+    } else {
+        filteredItems = -1;
+    }
     checks.forEach(function(check) {
         console.debug('check item', check);
         if (hidden) {
@@ -47,6 +52,7 @@ function onFilterButtonClicked() {
                 console.debug('check item is hidden: successful: ' + successful + ', required: ' + required)
                 check.classList.add('hidden-check');
             }
+            filteredItems += 1;
         } else {
             check.classList.remove('hidden-check');
         }
@@ -101,6 +107,7 @@ function listenUrlChanged() {
     window.addEventListener('pushState', function (e) {
         console.debug('Url changed', window.location.href);
         updateFilterButton(window.location.href);
+        filteredItems = -1;
     });
 }
 
