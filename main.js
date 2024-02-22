@@ -81,7 +81,7 @@ function insertHiddenCheckCssStyle() {
 }
 
 function updateFilterButton(href) {
-    const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+(#pullrequestreview-\d+)?(#discussion_r\d+)?$/;
+    const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+(#pullrequestreview-\d+)?(#discussion_r\d+)?(#issuecomment-\d+)?$/;
     if (regex.test(href)) {
         console.debug('show filter button', href);
         filterButton.classList.remove('hidden-check');
