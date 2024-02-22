@@ -12,7 +12,7 @@
 // @updateURL https://update.greasyfork.org/scripts/486753/GitHub%20Actions%20Filter%20Button.meta.js
 // ==/UserScript==
 
-var filteredItems = -1;
+var filteredItems = 0;
 var filterButton;
 
 function onFilterButtonClicked() {
@@ -22,11 +22,10 @@ function onFilterButtonClicked() {
         return;
     }
 
-    var hidden = filteredItems < 0;
-    if (hidden) {
-        filteredItems = 0;
-    } else {
-        filteredItems = -1;
+    var hidden = (filteredItems === 0);
+    // todo!
+    if (!hidden) {
+        filteredItems = 0
     }
     checks.forEach(function(check) {
         console.debug('check item', check);
@@ -107,7 +106,7 @@ function listenUrlChanged() {
     window.addEventListener('pushState', function (e) {
         console.debug('Url changed', window.location.href);
         updateFilterButton(window.location.href);
-        filteredItems = -1;
+        filteredItems = 0;
     });
 }
 
