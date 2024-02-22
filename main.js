@@ -83,15 +83,15 @@ function insertHiddenCheckCssStyle() {
 function updateFilterButton(href) {
     const regex = /github\.com\/kata-containers\/kata-containers\/pull\/\d+(#pullrequestreview-\d+)?(#discussion_r\d+)?$/;
     if (regex.test(href)) {
-        console.log('show filter button', href);
+        console.debug('show filter button', href);
         filterButton.classList.remove('hidden-check');
     } else {
-        console.log('hide filter button', href);
+        console.debug('hide filter button', href);
         filterButton.classList.add('hidden-check');
     }
 }
 
-function listenUrlChanged() {
+function listenUrlChanged(callback) {
     var _wr = function (type) {
         var orig = history[type];
         return function () {
@@ -103,10 +103,18 @@ function listenUrlChanged() {
         };
     };
     history.pushState = _wr('pushState');
+
     window.addEventListener('pushState', function (e) {
-        console.debug('Url changed', window.location.href);
-        updateFilterButton(window.location.href);
-        filteredItems = 0;
+        console.debug('pushState: url changed', window.location.href);
+        callback();
+    });
+    window.addEventListener('popstate', function (e) {
+        console.debug('popstate: url changed', window.location.href);
+        callback();
+    });
+    window.addEventListener('hashchange', function (e) {
+        console.debug('hashchange: url changed', window.location.href);
+        callback();
     });
 }
 
@@ -115,6 +123,10 @@ function listenUrlChanged() {
 
     insertHiddenCheckCssStyle();
     insertFilterButton();
+
     updateFilterButton(window.location.href);
-    listenUrlChanged();
+    listenUrlChanged(function() {
+        updateFilterButton(window.location.href);
+        filteredItems = 0;
+    });
 })();
