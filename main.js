@@ -29,9 +29,16 @@ function onFilterButtonClicked() {
 
     var hidden = (filteredItems === 0);
     if (!hidden) {
+        // Count the number of showing checks
+        var showingCheckCount = 0;
+        checks.forEach(function(check) {
+            if (!check.classList.contains('hidden-check')) {
+                showingCheckCount += 1;
+            }
+        });
         // GitHub updates periodly to restore the hidden checks.
         // We need to update `hidden` to fit the above issue.
-        if (checkCount === checks.length) {
+        if (checkCount === showingCheckCount) {
             console.log('checks were updated, hide checks again');
             hidden = true;
         }
@@ -45,12 +52,12 @@ function onFilterButtonClicked() {
             var elemCount = check.childElementCount;
             var statusElement = check.querySelector('div:nth-child('+ (elemCount-1) +')');
             if (!statusElement) {
-                console.error(check, 'check status not found');
+                console.debug(statusElement, 'check status not found');
                 return;
             }
             var detailsElement = check.querySelector('div:nth-child('+ elemCount +')');
             if (!detailsElement) {
-                console.error(check, 'check details not found');
+                console.debug(detailsElement, 'check details not found');
                 return;
             }
 
