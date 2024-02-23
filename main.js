@@ -13,6 +13,7 @@
 // ==/UserScript==
 
 var filteredItems = 0;
+var checkCount = 0;
 var filterButton;
 
 function onFilterButtonClicked() {
@@ -22,20 +23,32 @@ function onFilterButtonClicked() {
         return;
     }
 
+    if (checkCount === 0) {
+        checkCount = checks.length;
+    }
+
     var hidden = (filteredItems === 0);
-    // todo!
     if (!hidden) {
+        // GitHub updates periodly to restore the hidden checks.
+        // We need to update `hidden` to fit the above issue.
+        if (checkCount === checks.length) {
+            console.log('checks were updated, hide checks again');
+            hidden = true;
+        }
         filteredItems = 0
     }
     checks.forEach(function(check) {
-        console.debug('check item', check);
         if (hidden) {
-            var statusElement = check.querySelector('div:nth-child(3)');
+            // There is no github icon in the case of non-gha,
+            // so the indexes of status element and details element
+            // are required to calculate dynamically.
+            var elemCount = check.childElementCount;
+            var statusElement = check.querySelector('div:nth-child('+ (elemCount-1) +')');
             if (!statusElement) {
                 console.debug(statusElement, 'check status not found');
                 return;
             }
-            var detailsElement = check.querySelector('div:nth-child(4)');
+            var detailsElement = check.querySelector('div:nth-child('+ elemCount +')');
             if (!detailsElement) {
                 console.debug(detailsElement, 'check details not found');
                 return;
@@ -48,8 +61,10 @@ function onFilterButtonClicked() {
             var required = requiredText.includes('Required');
 
             if (successful || !required) {
-                console.debug('check item is hidden: successful: ' + successful + ', required: ' + required)
+                console.debug('check item is hidden: successful: ' + successful + ', required: ' + required, check);
                 check.classList.add('hidden-check');
+            } else {
+                console.info('check item isn\'t hidden: successful: ' + successful + ', required: ' + required, check);
             }
             filteredItems += 1;
         } else {
