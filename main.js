@@ -45,12 +45,12 @@ function onFilterButtonClicked() {
             var elemCount = check.childElementCount;
             var statusElement = check.querySelector('div:nth-child('+ (elemCount-1) +')');
             if (!statusElement) {
-                console.debug(statusElement, 'check status not found');
+                console.error(check, 'check status not found');
                 return;
             }
             var detailsElement = check.querySelector('div:nth-child('+ elemCount +')');
             if (!detailsElement) {
-                console.debug(detailsElement, 'check details not found');
+                console.error(check, 'check details not found');
                 return;
             }
 
